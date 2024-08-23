@@ -18,6 +18,26 @@
                     name="seniority"
                     attrs="{'invisible': [('registry_date', '=', False)]}"
                 />
+                <field
+                    name="position"
+                    attrs="{'invisible': [('registry_date', '=', False)]}"
+                />
+                <field
+                    name="retired"
+                    attrs="{'invisible': [('registry_date', '=', False)]}"
+                />
+                <field
+                    name="exempt"
+                    attrs="{'invisible': [('registry_date', '=', False)]}"
+                />
+                <field
+                    name="registry_type"
+                    attrs="{'invisible': [('registry_date', '=', False)]}"
+                />
+                <field
+                    name="quota_type"
+                    attrs="{'invisible': [('registry_date', '=', False)]}"
+                />
             </xpath>
         </field>
     </record>

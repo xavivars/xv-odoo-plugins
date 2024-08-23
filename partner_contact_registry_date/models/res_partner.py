@@ -13,6 +13,42 @@ class ResPartner(models.Model):
 
     registry_date = fields.Date("Registry Date")
     seniority = fields.Integer(readonly=True, compute="_compute_seniority")
+    position = fields.Text("Número de llista", readonly=True, compute="_compute_position")
+
+    registry_type = fields.Selection(
+        [
+            ("regular", "Membre de ple dret"),
+            ("honor", "Membre honorífic"),
+            ("menor", "Membre menor d'edat"),
+        ],
+        string="Modalitat de registre",
+        default="regular",
+    )
+
+    quota_type = fields.Selection(
+        [
+            ("full", "Quota íntegra"),
+            ("remote", "Fora de la localitat"),
+            ("discounted", "Tornant d'excedència" )
+        ],
+        string="Tipus de quota",
+        default="full",
+    )
+
+    retired = fields.Boolean("Jubilat")
+    exempt = fields.Boolean("En excedència")
+
+
+    @api.depends("seniority", "age")
+    def _compute_position(self):
+        self.position = 0
+        all_partners = self.env["res.partner"].search(['registry_date', '=like', '%' ], "seniority asc, age asc" )
+        i = 1
+        for partner in all_partners:
+            if partner.id == self.id:
+                self.position = i
+                break
+
 
     @api.depends("registry_date")
     def _compute_seniority(self):
