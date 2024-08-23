@@ -41,13 +41,14 @@ class ResPartner(models.Model):
 
     @api.depends("seniority", "age")
     def _compute_position(self):
-        self.position = 0
         all_partners = self.env["res.partner"].search(['registry_date', '=like', '%' ], "seniority asc, age asc" )
-        i = 1
-        for partner in all_partners:
-            if partner.id == self.id:
-                self.position = i
-                break
+        for record in self:
+            record.position = 0
+            i = 1
+            for partner in all_partners:
+                if partner.id == record.id:
+                    record.position = i
+                i += 1
 
 
     @api.depends("registry_date")
