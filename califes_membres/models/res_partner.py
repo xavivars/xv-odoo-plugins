@@ -7,13 +7,13 @@ from odoo import api, fields, models
 
 
 class ResPartner(models.Model):
-    """Partner with birth date in date format."""
+    """Partner with registry date."""
 
     _inherit = "res.partner"
 
     registry_date = fields.Date("Registry Date")
     seniority = fields.Integer(readonly=True, compute="_compute_seniority")
-    position = fields.Text("Número de llista", readonly=True, compute="_compute_position")
+    position = fields.Integer("Número de llista", readonly=True, compute="_compute_position", store=True)
 
     registry_type = fields.Selection(
         [
@@ -39,13 +39,17 @@ class ResPartner(models.Model):
     exempt = fields.Boolean("En excedència")
 
 
-    @api.depends("seniority", "age")
+    @api.depends("registry_date", "birthdate_date")
     def _compute_position(self):
-        all_partners = self.env["res.partner"].search(['registry_date', '=like', '%' ], "seniority asc, age asc" )
+        all_partner = self.env['res.partner'].search([])
+        all_with_registry = all_partner.filtered(lambda r: r.registry_date is not None and r.registry_date != False)
+        all_with_birthdate = all_with_registry.filtered(lambda r: r.birthdate_date is not None and r.birthdate_date != False)
+        all_sorted = all_with_birthdate.sorted(lambda r: f"{r.registry_date}-{r.birthdate_date}")
+
         for record in self:
             record.position = 0
             i = 1
-            for partner in all_partners:
+            for partner in all_sorted:
                 if partner.id == record.id:
                     record.position = i
                 i += 1
