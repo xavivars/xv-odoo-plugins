@@ -29,6 +29,7 @@ class ResPartner(models.Model):
         [
             ("full", "Quota íntegra"),
             ("remote", "Fora de la localitat"),
+            ("student", "Estudiant"),
             ("discounted", "Tornant d'excedència" )
         ],
         string="Tipus de quota",
