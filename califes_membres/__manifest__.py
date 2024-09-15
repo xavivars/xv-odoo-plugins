@@ -7,8 +7,15 @@
     "author": "Xavi Ivars",
     "category": "Customer Relationship Management",
     "website": "https://github.com/xavivars/xv-odoo",
-    "depends": ["partner_contact_personal_information_page", "partner_contact_birthdate"],
-    "data": ["views/res_partner.xml"],
+    "depends": [
+        "partner_contact_personal_information_page",
+        "partner_contact_birthdate",
+        "account_financial_report"
+    ],
+    "data": [
+        "views/res_partner.xml",
+        "report/templates/califes.xml",
+    ],
     "license": "AGPL-3",
     "installable": True,
 }
