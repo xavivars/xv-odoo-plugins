@@ -10,7 +10,7 @@ from odoo.tools import float_is_zero
 
 
 class CalifesReport(models.AbstractModel):
-    _name = "report.account_financial_report.califes_report"
+    _name = "report.califes.califes_report"
     _description = "Califes"
     _inherit = "report.account_financial_report.abstract_report"
 

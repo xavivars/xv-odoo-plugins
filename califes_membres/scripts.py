@@ -1,0 +1,1 @@
+self.env["ir.actions.report"].search([("report_name", "=", report_name), ("report_type", "=", report_type)])
