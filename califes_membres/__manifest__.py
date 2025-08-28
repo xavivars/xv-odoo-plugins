@@ -3,7 +3,7 @@
 
 {
     "name": "Califes - Membres",
-    "version": "16.0.1.0.0",
+    "version": "16.0.2.0.0",
     "author": "Xavi Ivars",
     "category": "Customer Relationship Management",
     "website": "https://github.com/xavivars/xv-odoo",
