@@ -52,21 +52,24 @@ class ResPartner(models.Model):
         all_minors = all_with_birthdate.filtered(lambda r: r.registry_type == 'menor')
         all_minors_sorted = all_minors.sorted(lambda r: f"{r.registry_date}-{r.birthdate_date}")
 
+        updated = False
+
         for record in self:
             record.position = 0
             i = 1
             for partner in all_sorted:
                 if partner.id == record.id:
                     record.position = i
+                    updated = True
                 i += 1
 
-        for record in self:
-            record.position = 0
-            i = 101
-            for partner in all_minors_sorted:
-                if partner.id == record.id:
-                    record.position = i
-                i += 1
+        if not updated:
+            for record in self:
+                i = 101
+                for partner in all_minors_sorted:
+                    if partner.id == record.id:
+                        record.position = i
+                    i += 1
 
     @api.depends("registry_date")
     def _compute_seniority(self):
