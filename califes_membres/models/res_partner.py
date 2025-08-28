@@ -45,7 +45,12 @@ class ResPartner(models.Model):
         all_partner = self.env['res.partner'].search([])
         all_with_registry = all_partner.filtered(lambda r: r.registry_date is not None and r.registry_date != False)
         all_with_birthdate = all_with_registry.filtered(lambda r: r.birthdate_date is not None and r.birthdate_date != False)
-        all_sorted = all_with_birthdate.sorted(lambda r: f"{r.registry_date}-{r.birthdate_date}")
+
+        all_adults = all_with_birthdate.filtered(lambda r: r.registry_type != 'menor')
+        all_sorted = all_adults.sorted(lambda r: f"{r.registry_date}-{r.birthdate_date}")
+
+        all_minors = all_with_birthdate.filtered(lambda r: r.registry_type == 'menor')
+        all_minors_sorted = all_minors.sorted(lambda r: f"{r.registry_date}-{r.birthdate_date}")
 
         for record in self:
             record.position = 0
@@ -55,6 +60,13 @@ class ResPartner(models.Model):
                     record.position = i
                 i += 1
 
+        for record in self:
+            record.position = 0
+            i = 101
+            for partner in all_minors_sorted:
+                if partner.id == record.id:
+                    record.position = i
+                i += 1
 
     @api.depends("registry_date")
     def _compute_seniority(self):
